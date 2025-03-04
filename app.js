@@ -7,25 +7,28 @@ const cors = require("cors");
 //import index.js router
 const indexRouter = require("./routes/index");
 const productsRouter = require("./routes/products");
-const customersRouter = require("./routes/customers")
+const customersRouter = require("./routes/customers");
+const salesRouter = require("./routes/sales");
 
 const app = express();
 
 //add views folder
 app.use(express.static(path.join(__dirname, "views")));
 //add public folder
-app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 //use index router
-app.use("/", indexRouter)
+app.use("/", indexRouter);
 //use products router
-app.use("/products", productsRouter)
+app.use("/products", productsRouter);
 //use customers page
 app.use("/customers", customersRouter);
+//use sales page
+app.use("/sales", salesRouter);
 
 //listen to port
 app.listen(PORT, () => {
-    console.log(`listening at ${PORT}`);
+  console.log(`listening at ${PORT}`);
 });
 
 module.exports = app;

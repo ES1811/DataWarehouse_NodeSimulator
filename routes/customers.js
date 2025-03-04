@@ -13,7 +13,7 @@ router.get("/getcustomers", async (req, res) => {
   try {
     const response = await axios.get(url);
     const data = await response.data;
-    console.log(data);
+    //console.log(data);
     res.status(200).json(data);
   } catch (error) {
     console.error(error);
@@ -24,7 +24,7 @@ router.get("/getcustomers", async (req, res) => {
   }
 });
 
-/*
+/* another attempt but it didn't work lol
 let data;
 axios
   .get("https://randomuser.me/api/?results")
