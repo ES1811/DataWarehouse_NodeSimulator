@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/common.css">
+</head>
+
+<body>
+    <div id="navbar">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/customers">Customers</a></li>
+            <li><a href="/sales">Sales</a></li>
+        </ul>
+    </div>
+    <h1>Customers</h1>
+    <button type="button" onclick="getCustomers()">Get Customers</button>
+    <div id="customers-table-selection">
+        <table id="customer-table-head">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                </tr>
+            </thead>
+            <tbody id="customer-table-body">
+                <!--dynamic table comes here-->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        async function getCustomers() {
+            const url = "http://localhost:3000/customers/getcustomers"
+            let row = "";
+            let id = 1;
+            try {
+                const response = await fetch(url)
+                if (!response.ok) { throw new Error("error fetching data") }
+                const data = await response.json();
+                const customersData = data.results;
+                console.log(data)
+                customersData.forEach((customer) => row += `
+                <tr>
+                    <td>${id++}</td>
+                    <td>${customer.name.first} ${customer.name.last}</td>
+                    <td>${customer.gender}</td>
+                    <td>${customer.location.city}</td>
+                    <td>${customer.location.state}</td>
+                    <td>${customer.location.country}</td>
+                </tr>                          
+                
+                `)
+                console.log(id)
+                document.getElementById("customer-table-body").innerHTML = "";
+                document.getElementById("customer-table-body").innerHTML = row;
+
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+
+    </script>
+
+</body>
+
+</html>
