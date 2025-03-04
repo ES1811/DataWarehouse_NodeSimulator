@@ -4,7 +4,7 @@ const path = require("path");
 
 //index route
 router.get("/", (req, res) => {
-    res.sendFile(path.join((__dirname, "../views/index.html")))
-})
+  res.sendFile(path.join(__dirname, "../views/index.html"));
+});
 
-module.exports=router;
+module.exports = router;
