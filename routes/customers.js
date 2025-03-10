@@ -7,13 +7,27 @@ router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/customers.html"));
 });
 
+//create an empty array
+let peopleArray = [];
+let customersObject = {
+  results: []
+};
+
 router.get("/getcustomers", async (req, res) => {
-  const personNumber = 400;
+  const personNumber = 200;
+  if (customersObject.results.length > 0) {
+    return res.status(200).json(customersObject);
+  }
   const url = `https://randomuser.me/api/?results=${personNumber}`;
   try {
     const response = await axios.get(url);
     const data = await response.data;
     //console.log(data);
+    //transfer 400 to my array
+    //peopleArray = data;
+    customersObject = data;
+    console.log(customersObject.results.length);
+
     res.status(200).json(data);
   } catch (error) {
     console.error(error);

@@ -19,6 +19,7 @@
     </div>
     <h1>Sales</h1>
     <button type="button" onclick="getSales()">Get Sales</button>
+    <button type="button" onclick="saveToFile()">Save as Json</button>
     <div id="sales-table">
         <table>
             <thead>
@@ -46,16 +47,19 @@
         const baseURL = window.location.origin;
         const salesTable = document.getElementById("sales-body");
 
+        let salesData = [];
+
         async function getSales() {
             const url = "http://localhost:3000/sales/getsales"
             let row = "";
             try {
                 const response = await fetch(url)
-                if(!response.ok) {throw new Error("error fetching data")}
+                if (!response.ok) { throw new Error("error fetching data") }
                 const data = await response.json()
                 console.log(data)
 
-                data.datawareHouse.forEach((sales) => {console.log(sales.id), row += `
+                data.datawareHouse.forEach((sales) => {
+                    console.log(sales.id), row += `
 
                     <tr>
                         <td>${sales.id}</td>
@@ -77,6 +81,43 @@
                 console.error("error", error);
             }
 
+        }
+
+        async function saveToFile() {
+            const url = "http://localhost:3000/sales/saveasjson"
+
+            try {
+                const response = await fetch(url)
+                const data = await response.json();
+                console.log(data)
+                if (salesData.length == 0) {
+                    alert("no data available to export")
+                    return;
+                }
+                alert(data.message)
+
+
+            } catch (error) {
+                console.error("error", error)
+            }
+
+            let cvsContent = "ID, Customer, Product, Price, City, State, Country\n"; //CSV headers
+            salesData.forEach(sale => {
+                cvsContent += `
+                ${sale.id},
+                ${sale.customer},
+                ${sale.product},
+                ${sale.price},
+                ${sale.city},
+                ${sale.state},
+                ${sale.country}\n`;
+            });
+
+            //create a Blob and download the file
+            const blob = new Blob([cvsContent], { type: "text/csv" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "sales.csv"
         }
     </script>
 
